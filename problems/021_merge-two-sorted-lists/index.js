@@ -15,28 +15,31 @@
  */
 const { ListNode } = require('../../scripts/problem-utils');
 
-var mergeTwoLists = function (l1, l2) {
-  var l = new ListNode(null), node;
-  var head = l;
-  while (l1 && l2) {
-    if (l1.val < l2.val) {
-      l.next = new ListNode(l1.val);
-      l1 = l1.next;
-    } else if (l1.val > l2.val) {
-      l.next = new ListNode(l2.val);
-      l2 = l2.next;
+const mergeTwoLists = function (l1, l2) {
+  let p1 = l1,
+    p2 = l2,
+    head = new ListNode(null),
+    cur = head;
+
+  while(p1 && p2){
+    if(p1.val < p2.val){
+      cur.next = p1;
+      cur = p1;
+      p1 = p1.next;
     } else {
-      l.next = new ListNode(l1.val);
-      l1 = l1.next;
-      l = l.next;
-      l.next = new ListNode(l2.val);
-      l2 = l2.next;
+      cur.next = p2;
+      cur = p2;
+      p2 = p2.next;
     }
-    l = l.next;
   }
-  if (l1) l.next = l1;
-  if (l2) l.next = l2;
+
+  if(p1){
+    cur.next = p1;
+  }
+  if(p2){
+    cur.next = p2;
+  }
   return head.next;
 };
-
+//80ms 96.92%
 module.exports = mergeTwoLists;
