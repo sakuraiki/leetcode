@@ -9,4 +9,10 @@ module.exports = [{
 }, {
   input  : [[new Interval(1,4),new Interval(0,2),new Interval(3,5)]],
   output : [new Interval(0, 5)]
+}, {
+  input  : [[new Interval(1,4),new Interval(2,3)]],
+  output : [new Interval(1, 4)]
+}, {
+  input  : [[]],
+  output : []
 }];

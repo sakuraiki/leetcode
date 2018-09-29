@@ -17,34 +17,33 @@ function Interval(start, end) {
   this.end = end;
 }
 
-var merge = function(intervals) {
-  const [pair, starts] = intervals.reduce(([pair, starts], interval) => {
-    if (pair[interval.start] === undefined) {
-      pair[interval.start] = interval.end;
-      starts.push(interval.start);
-    } else pair[interval.start] = Math.max(pair[interval.start], interval.end);
-    return [pair, starts];
-  }, [{}, []]);
-  starts.sort((s1, s2) => s1 > s2 ? 1 : -1);
-
-  for (let i = 0; i < starts.length; i++) {
-    const start = starts[i];
-    if (pair[start] !== undefined) {
-      let end = pair[start];
-      for (let j = i + 1; j < starts.length; j++) {
-        if (pair[starts[j]] !== undefined && end >= starts[j]) {
-          end = Math.max(end, pair[starts[j]]);
-          delete pair[starts[j]];
-        }
-      }
-      pair[start] = end;
-    }
+const merge = function(intervals) {
+  let len = intervals.length;
+  if(len < 2){
+    return intervals;
   }
 
-  return starts.reduce((pre, start) => {
-    if (pair[start] !== undefined) pre.push(new Interval(start, pair[start]));
-    return pre;
-  }, []);
-};
+  intervals = intervals.sort(function(a, b){
+    return a.start - b.start;
+  });
 
+  let ret = [],
+    head = intervals[0].start,
+    tail = intervals[0].end;
+
+  for(let i = 1; i < len; ++i){
+    if(intervals[i].start > tail){
+      ret.push(new Interval(head, tail));
+      head = intervals[i].start;
+    }
+    tail = intervals[i].end > tail? intervals[i].end: tail;
+  }
+
+  if(ret.length === 0 || ret[ret.length - 1].end !== tail){
+    ret.push(new Interval(head, tail));
+  }
+
+  return ret;
+};
+//120ms 58.59%
 module.exports = merge;
