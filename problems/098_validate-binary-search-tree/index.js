@@ -12,30 +12,14 @@
  * @param {TreeNode} root
  * @return {boolean}
  */
-var isValidBST = function(root) {
-  var flag = true;
-  
-  var validate = function (node, min, max) {
-    if (flag && node) {
-      if (node.left) {
-        if (max) {
-          (node.left.val < node.val && node.left.val > max) ? validate(node.left, node.val, max) : flag = false;
-        } else {
-          (node.left.val < node.val) ? validate(node.left, node.val, max) : flag = false;
-        }
-      }
-      
-      if (node.right) {
-        if (min) {
-          (node.right.val > node.val && node.right.val < min) ? validate(node.right, min, node.val) : flag = false;
-        } else {
-          (node.right.val > node.val) ? validate(node.right, min, node.val) : flag = false;
-        }
-      }
-    }
-  };
-  validate(root, null, null);
-  
-  return flag;
+const isValidBST = function(root) {
+  return isValid(root, null, null);
 };
+const isValid = function(root, min, max){
+  if(!root) return true;
+  if(min !== null && min >= root.val) return false;
+  if(max !== null && max <= root.val) return false;
+  return (isValid(root.left, min, root.val) && isValid(root.right, root.val, max));
+};
+//80ms 98.80%
 module.exports = isValidBST;
