@@ -1,0 +1,58 @@
+/**
+ * @param {number} n
+ * @return {number[][]}
+ */
+const DIRECTIONS = {
+    RIGHT: [1,0],
+    DOWN: [0,1],
+    LEFT: [-1,0],
+    UP: [0,-1]
+}
+
+var generateMatrix = function(n) {
+    let layer = 0,
+        direction = DIRECTIONS.RIGHT,
+        n2 = n*n,
+        x = 0,
+        y = 0;
+    let arr = new Array(n).fill(0).map(_ => new Array(n))
+    for (let i = 1; i <= n2; ++i) {
+        arr[y][x] = i
+        // console.log(y, x, i)
+        x += direction[0]
+        y += direction[1]
+
+        switch(direction) {
+            case DIRECTIONS.RIGHT:
+                if (x >= n-layer) {
+                    direction = DIRECTIONS.DOWN
+                    x = n - layer - 1
+                    y += direction[1]
+                }
+                break;
+            case DIRECTIONS.DOWN:
+                if (y >= n - layer) {
+                    direction = DIRECTIONS.LEFT
+                    y = n - layer - 1
+                    x += direction[0]
+                }
+                break;
+            case DIRECTIONS.LEFT:
+                if (x < layer) {
+                    direction = DIRECTIONS.UP
+                    x = layer
+                    y += direction[1]
+                }
+                break;
+            case DIRECTIONS.UP:
+                if (y <= layer) {
+                    layer += 1
+                    direction = DIRECTIONS.RIGHT
+                    y = layer
+                    x += direction[0]
+                }
+                break;
+        }
+    }
+    return arr
+};
